@@ -13,11 +13,13 @@
 
   <script>
     function handleCredentialResponse(response) {
+      console.log("Response received:", response);
       // Token ID received from Google
       const token = response.credential;
       console.log("Google Token ID:", token);
 
       // Optionally: Send token to your backend server for further verification
+      // Example: send to server to verify subscription status
       fetch('https://script.google.com/macros/s/AKfycbxB0l0ah1VQJuULFtNNx3Cu8zAyO4NQb42UIBpbF-tP7U1nMB2e0QPaupC78LYazbo8/exec', {
         method: 'POST',
         headers: {
@@ -25,9 +27,12 @@
         },
         body: JSON.stringify({ token: token })
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log("Server response:", response);
+        return response.json();
+      })
       .then(data => {
-        console.log('Server response:', data);
+        console.log('Server response data:', data);
 
         // If the user has a valid subscription, redirect them to the resources
         if (data.subscriptionStatus === 'active') {
