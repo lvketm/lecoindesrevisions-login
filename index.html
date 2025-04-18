@@ -3,22 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Login with Google</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-</head>
-<body>
-  <h2>Login to LeCoinDesRevisions</h2>
-  <!-- Google Login Button -->
-  <div id="google-login"></div>
-
   <script>
     function handleCredentialResponse(response) {
-      // Token ID received from Google
       const token = response.credential;
-      console.log("Google Token ID:", token);
-
-      // Optionally: Send token to your backend server for further verification
-      fetch('https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbxB0l0ah1VQJuULFtNNx3Cu8zAyO4NQb42UIBpbF-tP7U1nMB2e0QPaupC78LYazbo8/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,29 +17,39 @@
       })
       .then(response => response.json())
       .then(data => {
-        console.log('Server response:', data);
-
-        // If the user has a valid subscription, redirect them to the resources
-        if (data.status === 'active') {
-          window.location.href = 'https://lvketm.github.io/lecoindesrevisions-login/resources.html';  // Replace with actual page
-        } else {
-          window.location.href = 'https://lvketm.github.io/lecoindesrevisions-login/payment.html';  // Payment page
-        }
+        console.log('Subscription Status:', data.status);
+        alert('Your subscription status is: ' + data.status);
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+        console.error('Error:', error);
+      });
     }
+  </script>
+</head>
+<body>
+  <h1>Login with Google to Verify Subscription</h1>
 
-    window.onload = function () {
+  <!-- Google Sign-In Button -->
+  <div id="g_id_onload"
+       data-client_id="879720349020-5ibqgn7i81fckep2pe2vq34pdamtid9d.apps.googleusercontent.com"
+       data-login_uri="https://lvketm.github.io/lecoindesrevisions-login/"
+       data-callback="handleCredentialResponse">
+  </div>
+  
+  <div id="g_id_signin" data-type="standard"></div>
+
+  <script>
+    window.onload = function() {
       google.accounts.id.initialize({
-        client_id: 'YOUR_GOOGLE_CLIENT_ID',  // Your Google OAuth Client ID
+        client_id: "879720349020-5ibqgn7i81fckep2pe2vq34pdamtid9d.apps.googleusercontent.com",
         callback: handleCredentialResponse
       });
-
       google.accounts.id.renderButton(
-        document.getElementById('google-login'),
-        { theme: 'outline', size: 'large' }
+        document.getElementById("g_id_signin"), 
+        { theme: "outline", size: "large" }
       );
-    };
+      google.accounts.id.prompt();  // Optional: Automatically prompt user for login if necessary
+    }
   </script>
 </body>
 </html>
