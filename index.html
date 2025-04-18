@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Le Coin des Révisions – Login</title>
+    <meta name="google-signin-client_id" content="879720349020-5ibqgn7i81fckep2pe2vq34pdamtid9d.apps.googleusercontent.com">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <h1>Bienvenue !</h1>
+    <div id="g_id_onload"
+         data-client_id="879720349020-5ibqgn7i81fckep2pe2vq34pdamtid9d.apps.googleusercontent.com"
+         data-callback="handleLogin">
+    </div>
+
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <script>
+      async function handleLogin(response) {
+        const idToken = response.credential;
+
+        // Send the token to your Apps Script web app for validation
+        const res = await fetch("https://script.google.com/macros/s/AKfycbyOkMX9r5d_wAkOdVZ9eOhH3ytyCo1P1Zf5eKmNK805na0S6xtVKousmPsBOKnQWSx5qg/exec", {
+          method: "POST",
+          body: JSON.stringify({ token: idToken }),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await res.json();
+
+        if (data.status === "active") {
+          window.location.href = "https://sites.google.com/view/lecoindesrevisions/main";
+        } else {
+          window.location.href = "https://buy.stripe.com/bIY6oDgR0cas6S44gg";
+        }
+      }
+    </script>
+  </body>
+</html>
