@@ -13,29 +13,24 @@
 
   <script>
     function handleCredentialResponse(response) {
-      console.log("Response received:", response);
       // Token ID received from Google
       const token = response.credential;
       console.log("Google Token ID:", token);
 
       // Optionally: Send token to your backend server for further verification
-      // Example: send to server to verify subscription status
-      fetch('https://script.google.com/macros/s/AKfycbxB0l0ah1VQJuULFtNNx3Cu8zAyO4NQb42UIBpbF-tP7U1nMB2e0QPaupC78LYazbo8/exec', {
+      fetch('https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ token: token })
       })
-      .then(response => {
-        console.log("Server response:", response);
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
-        console.log('Server response data:', data);
+        console.log('Server response:', data);
 
         // If the user has a valid subscription, redirect them to the resources
-        if (data.subscriptionStatus === 'active') {
+        if (data.status === 'active') {
           window.location.href = 'https://lvketm.github.io/lecoindesrevisions-login/resources.html';  // Replace with actual page
         } else {
           window.location.href = 'https://lvketm.github.io/lecoindesrevisions-login/payment.html';  // Payment page
@@ -46,7 +41,7 @@
 
     window.onload = function () {
       google.accounts.id.initialize({
-        client_id: '879720349020-5ibqgn7i81fckep2pe2vq34pdamtid9d.apps.googleusercontent.com',  // Your Google OAuth Client ID
+        client_id: 'YOUR_GOOGLE_CLIENT_ID',  // Your Google OAuth Client ID
         callback: handleCredentialResponse
       });
 
